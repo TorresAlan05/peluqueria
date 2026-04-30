@@ -21,6 +21,10 @@ export class Registro{
     // hacer la parte del registro
     //  console.log( " usuario ya registrado ");
     console.log(this.miRegistro.mail, this.miRegistro.contra, this.miRegistro.contra2);
+
+// Guardar en localStorage
+  localStorage.setItem("usuario", JSON.stringify(this.miRegistro));
+
     this.route.navigateByUrl("login");
     }
 }

@@ -1,0 +1,52 @@
+/* Fondo */
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+/* Centrado */
+.container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Caja */
+.box {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  text-align: center;
+  width: 300px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* Título */
+.box h1 {
+  margin-bottom: 10px;
+}
+
+/* Texto */
+.box p {
+  margin-bottom: 20px;
+  color: #666;
+}
+
+/* Botones */
+.box button {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 8px;
+  background: #667eea;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.box button:hover {
+  background: #5a67d8;
+}

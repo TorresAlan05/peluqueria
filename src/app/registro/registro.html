@@ -1,15 +1,19 @@
-<hr>
-<p>registro works!</p>
-<!-- <p>{{miRegistro.mail}}</p> -->
-<!-- <form (ngSubmit)="ClickRegistros()"> -->
-    <input [(ngModel)]="miRegistro.mail" name="mail" placeholder="Mail">
-    <br>
-    <input [(ngModel)]="miRegistro.contra" name="contra" placeholder="Contraseña">
-    <br>
-    <input [(ngModel)]="miRegistro.contra2"  name="contra2" placeholder="Confirmar contraseña">
-    <!-- <button type="submit">Registrarse</button> -->
-    <button  (click)="ClickRegistros()">Registrarse</button>
-<!-- </form> -->
-<button>
-<a [routerLink]="['../login']">LOG</a>
-</button>
+<div class="container">
+  <div class="form-box">
+    <h2>Registro</h2>
+
+    <form (ngSubmit)="ClickRegistros()">
+      <input type="email" [(ngModel)]="miRegistro.mail" name="mail" placeholder="Email" required>
+      <input type="password" [(ngModel)]="miRegistro.contra" name="contra" placeholder="Contraseña" required>
+      <input type="password" [(ngModel)]="miRegistro.contra2" name="contra2" placeholder="Repetir contraseña" required>
+
+      <button type="submit">Registrarse</button>
+    </form>
+
+    <p>¿Ya tenés cuenta? <a routerLink="/login">Iniciar sesión</a></p>
+  </div>
+</div>
+
+
+
+
