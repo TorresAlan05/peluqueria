@@ -19,16 +19,12 @@ export class Turno {
     
 }
 registrarTurno() {
-    // Verificamos que los campos tengan datos
+    
     if (this.nuevoTurno.nombre && this.nuevoTurno.apellido && this.nuevoTurno.hora) {
-      
-      // Guardamos una copia en el array
-      // Usamos Spread Operator (...) para crear un objeto nuevo y que no se pisen
       this.listaTurnos.push({ ...this.nuevoTurno } as Turnos);
 
       console.log("Turno registrado:", this.nuevoTurno);
       
-      // Limpiamos el formulario
       this.limpiarCampos();
       
     } else {

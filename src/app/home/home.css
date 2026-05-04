@@ -1,52 +1,39 @@
-/* Fondo */
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-}
-
-/* Centrado */
-.container {
-  height: 100vh;
+.navbar {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-}
-
-/* Caja */
-.box {
-  background: white;
-  padding: 40px;
-  border-radius: 12px;
-  text-align: center;
-  width: 300px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-}
-
-/* Título */
-.box h1 {
-  margin-bottom: 10px;
-}
-
-/* Texto */
-.box p {
-  margin-bottom: 20px;
-  color: #666;
-}
-
-/* Botones */
-.box button {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  border: none;
-  border-radius: 8px;
-  background: #667eea;
+  padding: 0 20px;
+  height: 60px;
+  background-color: #1a1a1a;
   color: white;
-  cursor: pointer;
-  transition: 0.3s;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-.box button:hover {
-  background: #5a67d8;
+.navbar-menu {
+  display: flex;
+  gap: 15px;
+}
+
+.nav-btn {
+  background: transparent;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.nav-btn-primary {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* El contenedor del contenido */
+.content-container {
+  padding: 20px;
+  min-height: calc(100vh - 60px); /* Ocupa el resto de la pantalla exactamente */
+  background-color: #f4f4f4;
 }
