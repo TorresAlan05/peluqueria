@@ -1,0 +1,13 @@
+<div class="container">
+  <div class="form-box">
+    <h2>Turnos</h2>
+
+    <form (ngSubmit)="registrarTurno()">
+      <input type="email" [(ngModel)]="nuevoTurno.nombre" name="mail" placeholder="Nombre" required>
+      <input type="name" [(ngModel)]="nuevoTurno.apellido" name="contra" placeholder="Apellido" required>
+      <input type="name" [(ngModel)]="nuevoTurno.hora" name="contra2" placeholder="Hora" required>
+
+      <button type="submit">Si</button>
+    </form>
+  </div>
+</div>

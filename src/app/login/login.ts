@@ -28,7 +28,7 @@ constructor(public router: Router) {
 
       if(this.miLogin.mail === usuario.mail && this.miLogin.contra === usuario.contra){
         console.log("Login correcto");
-        this.router.navigateByUrl("");
+        this.router.navigateByUrl("turno");
       } else {
         alert("Datos incorrectos");
       }
