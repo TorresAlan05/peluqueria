@@ -1,13 +1,23 @@
 <div class="container">
   <div class="form-box">
-    <h2>Turnos</h2>
+  
+  <form (ngSubmit)="registrarTurno()">
+    
+    
+      <h2>Registrar Nuevo Turno</h2>
+      
+      <input type="text" [(ngModel)]="nuevoTurno.nombre" name="nombre" placeholder="Nombre">
+  
+      <input type="text" [(ngModel)]="nuevoTurno.apellido" name="apellido" placeholder="Apellido">
 
-    <form (ngSubmit)="registrarTurno()">
-      <input type="email" [(ngModel)]="nuevoTurno.nombre" name="mail" placeholder="Nombre" required>
-      <input type="name" [(ngModel)]="nuevoTurno.apellido" name="contra" placeholder="Apellido" required>
-      <input type="name" [(ngModel)]="nuevoTurno.hora" name="contra2" placeholder="Hora" required>
+      
+      <input type="time" [(ngModel)]="nuevoTurno.hora" name="hora">
+   
+      
+      <input type="date" [(ngModel)]="nuevoTurno.dia" name="dia" placeholder="Dia">
+    
 
-      <button type="submit">Si</button>
-    </form>
+    <button type="submit">Generar y Descargar JSON</button>
+  </form>
   </div>
 </div>
