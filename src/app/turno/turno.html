@@ -1,23 +1,38 @@
-<div class="container">
+<form [formGroup]="formTurno" (ngSubmit)="onSubmit()" class="formulario-turno">
+  
+  <div class="container">
   <div class="form-box">
-  
-  <form (ngSubmit)="registrarTurno()">
-    
-    
-      <h2>Registrar Nuevo Turno</h2>
-      
-      <input type="text" [(ngModel)]="nuevoTurno.nombre" name="nombre" placeholder="Nombre">
-  
-      <input type="text" [(ngModel)]="nuevoTurno.apellido" name="apellido" placeholder="Apellido">
+    <h2>Reservar Turno</h2>
+    <input type="text" formControlName="nombre" placeholder="Nombre">
+ 
+    <input type="text" formControlName="apellido" placeholder="Apellido">
 
-      
-      <input type="time" [(ngModel)]="nuevoTurno.hora" name="hora">
-   
-      
-      <input type="date" [(ngModel)]="nuevoTurno.dia" name="dia" placeholder="Dia">
-    
+    <select formControlName="servicio">
+      <option value="" disabled selected>Seleccione un servicio</option>
+      <option *ngFor="let s of listaServicios" [value]="s">{{ s }}</option>
+    </select>
+ 
+    <select formControlName="dia">
+      <option value="" disabled selected>Seleccione un día</option>
+      <option *ngFor="let d of listaDias" [value]="d">{{ d }}</option>
+    </select>
 
-    <button type="submit">Generar y Descargar JSON</button>
-  </form>
+
+  
+  
+    <select formControlName="hora">
+      <option value="" disabled selected>Seleccione una hora</option>
+      <option *ngFor="let h of listaHoras" [value]="h">{{ h }}</option>
+    </select>
+
+
+ 
+    <label>Observaciones (Opcional):</label>
+    <textarea formControlName="observaciones"></textarea>
+
+     <button type="submit" [disabled]="formTurno.invalid">Agendar Turno</button>
   </div>
-</div>
+  </div>
+
+ 
+</form>

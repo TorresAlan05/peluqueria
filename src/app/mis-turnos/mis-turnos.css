@@ -1,0 +1,82 @@
+/* Reutiliza la base de tu CSS anterior */
+.turnos-container {
+  width: 400px; /* Un toque más ancho para que la lista se lea cómoda */
+  max-height: 80vh;
+  overflow-y: auto; /* Si hay muchos turnos, genera scroll interno dentro de la card */
+}
+
+.lista-turnos {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+/* Tarjeta individual de cada turno */
+.turno-item {
+  background: #f8fafc;
+  border-left: 5px solid #667eea;
+  padding: 12px 15px;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.turno-item h3 {
+  margin: 0 0 5px 0;
+  font-size: 16px;
+  color: #1a202c;
+}
+
+.servicio-tag {
+  display: inline-block;
+  background: #e2e8f0;
+  color: #4a5568;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: bold;
+  margin: 0 0 8px 0;
+}
+
+.fecha-hora {
+  margin: 0;
+  font-size: 13px;
+  color: #4a5568;
+}
+
+.obs {
+  margin: 5px 0 0 0;
+  font-size: 12px;
+  color: #718096;
+}
+
+.sin-turnos {
+  padding: 20px 0;
+}
+
+.btn-link {
+  display: inline-block;
+  margin-top: 10px;
+  background: #667eea;
+  color: white !important;
+  padding: 8px 15px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.btn-borrar {
+  width: 100%;
+  padding: 8px;
+  background: #e53e3e;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: 10px;
+}
+
+.btn-borrar:hover {
+  background: #c53030;
+}
