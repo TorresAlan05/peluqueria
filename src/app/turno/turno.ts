@@ -15,9 +15,9 @@ export class Turno implements OnInit {
 
   // Listas de opciones para los desplegables (Selects)
   listaServicios: string[] = ['Corte', 'Barba', 'Corte + Barba', 'Coloración + Corte'];
-  
+
   listaDias: string[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
-  
+
   listaHoras: string[] = [
     '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'
   ];
@@ -27,19 +27,19 @@ export class Turno implements OnInit {
   ngOnInit(): void {
     // Inicializamos el formulario con los nuevos campos requeridos
     this.formTurno = this.fb.group({
-      nombre: ['', Validators.required],       
-      apellido: ['', Validators.required],     
+      nombre: ['', Validators.required],
+      apellido: ['', Validators.required],
       servicio: ['', Validators.required], // <-- Nuevo campo
       dia: ['', Validators.required], 
       hora: ['', Validators.required],
-      observaciones: ['']             
+      observaciones: ['']
     });
   }
 
   onSubmit(): void {
     if (this.formTurno.valid) {
       const datosTurno = this.formTurno.value;
-      
+
       this.guardarEnLocalStorage(datosTurno); 
       this.formTurno.reset({
         servicio: '',
@@ -64,7 +64,7 @@ export class Turno implements OnInit {
 
     console.log("%c--- LISTA DE TURNOS ACTUALIZADA ---", "color: #00ff00; font-weight: bold;");
     console.table(listaTurnos); 
-    
+
     alert(`¡Turno de ${nuevoTurnoObjeto.nombre} para ${nuevoTurnoObjeto.servicio} agendado con éxito!`);
   }
 }

@@ -8,13 +8,52 @@
     </div>
 
     <div *ngIf="listaTurnos.length > 0" class="lista-turnos">
-      <div *ngFor="let turno of listaTurnos" class="turno-item">
-        <div class="turno-info">
-          <h3>{{ turno.nombre }} {{ turno.apellido }}</h3>
-          <p class="servicio-tag">{{ turno.servicio }}</p>
-          <p class="fecha-hora">📅 {{ turno.dia }} - ⏰ {{ turno.hora }} hs</p>
-          <p *ngIf="turno.observaciones" class="obs">📝 <em>{{ turno.observaciones }}</em></p>
+      <div *ngFor="let turno of listaTurnos; let i = index" class="turno-item">
+        
+        <div *ngIf="indiceEditando === i; else vistaNormal" class="turno-edicion-form">
+          <h3>Modificando turno de {{ turno.nombre }}</h3>
+          
+          <div class="campo-edicion">
+            <label>Servicio:</label>
+            <select [(ngModel)]="turnoEditado.servicio" class="select-edicion">
+              <option *ngFor="let s of listaServicios" [value]="s">{{ s }}</option>
+            </select>
+          </div>
+
+          <div class="campo-edicion">
+            <label>Día:</label>
+            <select [(ngModel)]="turnoEditado.dia" class="select-edicion">
+              <option *ngFor="let d of listaDias" [value]="d">{{ d }}</option>
+            </select>
+          </div>
+
+          <div class="campo-edicion">
+            <label>Hora:</label>
+            <select [(ngModel)]="turnoEditado.hora" class="select-edicion">
+              <option *ngFor="let h of listaHoras" [value]="h">{{ h }} hs</option>
+            </select>
+          </div>
+
+          <div class="turno-acciones">
+            <button (click)="guardarEdicion(i)" class="btn-guardar">💾 Guardar</button>
+            <button (click)="cancelarEdicion()" class="btn-cancelar">❌ Cancelar</button>
+          </div>
         </div>
+
+        <ng-template #vistaNormal>
+          <div class="turno-info">
+            <h3>{{ turno.nombre }} {{ turno.apellido }}</h3>
+            <p class="servicio-tag">{{ turno.servicio }}</p>
+            <p class="fecha-hora">📅 {{ turno.dia }} - ⏰ {{ turno.hora }} hs</p>
+            <p *ngIf="turno.observaciones" class="obs">📝 <em>{{ turno.observaciones }}</em></p>
+          </div>
+          
+          <div class="turno-acciones">
+            <button (click)="habilitarEdicion(i)" class="btn-editar">✏️ Editar</button>
+            <button (click)="eliminarTurno(i)" class="btn-eliminar">❌ Eliminar</button>
+          </div>
+        </ng-template>
+
       </div>
 
       <button (click)="borrarTodosLosTurnos()" class="btn-borrar">Vaciar Agenda</button>

@@ -1,38 +1,33 @@
-<form [formGroup]="formTurno" (ngSubmit)="onSubmit()" class="formulario-turno">
-  
-  <div class="container">
+<div class="container">
   <div class="form-box">
     <h2>Reservar Turno</h2>
-    <input type="text" formControlName="nombre" placeholder="Nombre">
- 
-    <input type="text" formControlName="apellido" placeholder="Apellido">
+    
+    <form [formGroup]="formTurno" (ngSubmit)="onSubmit()" class="formulario-turno">
+      
+      <input type="text" formControlName="nombre" placeholder="Nombre">
+   
+      <input type="text" formControlName="apellido" placeholder="Apellido">
 
-    <select formControlName="servicio">
-      <option value="" disabled selected>Seleccione un servicio</option>
-      <option *ngFor="let s of listaServicios" [value]="s">{{ s }}</option>
-    </select>
- 
-    <select formControlName="dia">
-      <option value="" disabled selected>Seleccione un día</option>
-      <option *ngFor="let d of listaDias" [value]="d">{{ d }}</option>
-    </select>
+      <select formControlName="servicio">
+        <option value="" disabled selected>Seleccione un servicio</option>
+        <option *ngFor="let s of listaServicios" [value]="s">{{ s }}</option>
+      </select>
+   
+      <select formControlName="dia">
+        <option value="" disabled selected>Seleccione un día</option>
+        <option *ngFor="let d of listaDias" [value]="d">{{ d }}</option>
+      </select>
 
+      <select formControlName="hora">
+        <option value="" disabled selected>Seleccione una hora</option>
+        <option *ngFor="let h of listaHoras" [value]="h">{{ h }}</option>
+      </select>
 
-  
-  
-    <select formControlName="hora">
-      <option value="" disabled selected>Seleccione una hora</option>
-      <option *ngFor="let h of listaHoras" [value]="h">{{ h }}</option>
-    </select>
+      <label>Observaciones (Opcional):</label>
+      <textarea formControlName="observaciones"></textarea>
 
-
- 
-    <label>Observaciones (Opcional):</label>
-    <textarea formControlName="observaciones"></textarea>
-
-     <button type="submit" [disabled]="formTurno.invalid">Agendar Turno</button>
+      <button type="submit" [disabled]="formTurno.invalid">Agendar Turno</button>
+      
+    </form>
   </div>
-  </div>
-
- 
-</form>
+</div>

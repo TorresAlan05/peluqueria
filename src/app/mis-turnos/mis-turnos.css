@@ -1,82 +1,121 @@
-/* Reutiliza la base de tu CSS anterior */
-.turnos-container {
-  width: 400px; /* Un toque más ancho para que la lista se lea cómoda */
-  max-height: 80vh;
-  overflow-y: auto; /* Si hay muchos turnos, genera scroll interno dentro de la card */
+/* --- AJUSTE DE CONTENEDOR PARA PANTALLAS CON MUCHOS DATOS --- */
+.container {
+  height: auto;             /* Quitamos el 100vh para que la pantalla pueda crecer hacia abajo */
+  min-height: 100vh;        /* Asegura que el fondo cubra toda la pantalla */
+  display: block;           /* Sacamos el flex centrado que rompe la estructura */
+  padding: 60px 20px;       /* Le damos aire arriba y abajo */
+  box-sizing: border-box;
 }
 
+/* LA CAJA PRINCIPAL (Ahora se adapta al contenido) */
+.turnos-container {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  text-align: center;
+  animation: fadeIn 0.5s ease;
+  box-sizing: border-box;
+  
+  /* Cambiamos el ancho fijo de 320px por un ancho máximo flexible */
+  width: 100%;
+  max-width: 1000px;        /* Se agranda para dar espacio a la grilla */
+  margin: 0 auto;           /* La centra horizontalmente en la pantalla */
+}
+
+/* --- LA SOLUCIÓN: GRILLA DE TURNOS EFICAZ --- */
 .lista-turnos {
+  display: grid;
+  /* Crea columnas automáticas de mínimo 280px. Si entran 2 o 3, se acomodan solas al lado de la otra */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+  gap: 25px;                /* Distancia generosa y limpia entre cada tarjeta de turno */
+  margin-top: 20px;
+  text-align: left;         /* La info se alinea a la izquierda de cada tarjeta */
+}
+
+/* CADA TARJETA DE TURNO (Individual, compacta y ordenada) */
+.turno-item {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
-  text-align: left;
+  justify-content: space-between; /* Manda los botones siempre al fondo de la tarjeta */
+  background: #f8fafc;      /* Un fondo gris muy sutil para separarlas del fondo blanco */
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  box-sizing: border-box;
+  min-height: 250px;        /* Altura mínima para que todas las tarjetas midan lo mismo */
 }
 
-/* Tarjeta individual de cada turno */
-.turno-item {
-  background: #f8fafc;
-  border-left: 5px solid #667eea;
-  padding: 12px 15px;
-  border-radius: 6px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+/* Distancia entre datos internos de la tarjeta */
+.turno-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;                /* Distancia entre Nombre, Servicio y Fecha */
 }
 
-.turno-item h3 {
-  margin: 0 0 5px 0;
-  font-size: 16px;
-  color: #1a202c;
+.turno-info h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
 }
 
 .servicio-tag {
   display: inline-block;
-  background: #e2e8f0;
-  color: #4a5568;
-  font-size: 11px;
-  padding: 2px 8px;
-  border-radius: 12px;
+  font-size: 12px;
   font-weight: bold;
-  margin: 0 0 8px 0;
+  color: #667eea;
+  background: #eef2ff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  width: fit-content;
 }
 
 .fecha-hora {
   margin: 0;
-  font-size: 13px;
-  color: #4a5568;
+  font-size: 14px;
+  color: #555;
 }
 
 .obs {
-  margin: 5px 0 0 0;
-  font-size: 12px;
-  color: #718096;
+  margin: 0;
+  font-size: 13px;
+  color: #777;
+  font-style: italic;
 }
 
-.sin-turnos {
-  padding: 20px 0;
+/* ACCIONES (Botones abajo de cada tarjeta) */
+.turno-acciones {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 15px;
 }
 
-.btn-link {
-  display: inline-block;
-  margin-top: 10px;
-  background: #667eea;
-  color: white !important;
-  padding: 8px 15px;
-  border-radius: 8px;
-  font-size: 14px;
+.turno-acciones button {
+  flex: 1;
+  margin-top: 0;            /* Evita pisar estilos globales */
+  padding: 8px;
+  font-size: 13px;
 }
 
+/* El botón de Vaciar Agenda se mantiene abajo del todo ocupando el ancho completo */
 .btn-borrar {
+  grid-column: 1 / -1;      /* Cruza toda la grilla de lado a lado */
+  width: 100%;
+}
+
+/* FORMULARIO DE EDICIÓN (Dentro de la tarjeta) */
+.turno-edicion-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+.select-edicion {
   width: 100%;
   padding: 8px;
-  background: #e53e3e;
-  border: none;
-  color: white;
+  border: 1px solid #ccc;
   border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s;
-  margin-top: 10px;
-}
-
-.btn-borrar:hover {
-  background: #c53030;
+  font-family: 'Montserrat', sans-serif;
 }
