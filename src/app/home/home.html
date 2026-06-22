@@ -1,17 +1,28 @@
-
 <header class="border-b border-neutral-800 bg-neutral-950/80 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 h-20 flex items-center justify-between">
-            <h1 class="text-xl font-extrabold tracking-widest uppercase text-amber-500">
-                Mati & Alan
-            </h1>
-            <nav class="hidden md:flex space-x-8 text-sm font-medium tracking-wider uppercase">
-              <a href="#sobre-nosotros" class="text-amber-500 transition">Sobre Nosotros</a>
-            </nav>
+    <div class="max-w-6xl mx-auto px-4 h-20 flex items-center justify-between gap-4">
+        
+        <h1 class="text-xl font-extrabold tracking-widest uppercase text-amber-500 shrink-0">
+            Mati & Alan
+        </h1>
+        
+        <nav class="hidden md:flex space-x-8 text-sm font-medium tracking-wider uppercase">
+          <a href="#sobre-nosotros" class="text-amber-500 transition hover:text-amber-400">Sobre Nosotros</a>
+        </nav>
+        
+        <div class="flex items-center gap-3">
+            
+            <a routerLink="/login" class="border border-neutral-800 hover:border-amber-500 bg-neutral-900/50 hover:bg-neutral-900 text-neutral-400 hover:text-amber-500 px-4 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition">
+                Admin
+            </a>
+
             <button routerLink="/registro" class="bg-amber-500 hover:bg-amber-600 text-neutral-950 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition shadow-lg shadow-amber-500/20">
                 Reservar Turno
-            </button>
+            </button>           
+            
             <button routerLink="/mis-turnos" class="bg-amber-500 hover:bg-amber-600 text-neutral-950 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition shadow-lg shadow-amber-500/20">
                 Mis Turnos
             </button>
+            
         </div>
-    </header>
+    </div>
+</header>
