@@ -7,8 +7,8 @@ interface Turno {
   apellido: string;
   mail: string;
   servicio: string;
-  fecha: string; // Ej: "2026-06-24"
-  dia: string;   // Ej: "Miércoles"
+  fecha: string;
+  dia: string;
   hora: string;
   estado: 'Confirmado' | 'Pendiente';
 }
@@ -18,17 +18,15 @@ interface Turno {
   standalone: true,
   imports: [CommonModule], 
   templateUrl: './admin.html',  
-  styleUrl: './admin.css'       
+  styleUrl: './admin.css'        
 })
 export class Admin implements OnInit { 
-  
   listaTurnos: Turno[] = [];
 
   constructor(private router: Router) {}
 
   ngOnInit() {
-    const rol = localStorage.getItem('rol');
-    if (rol !== 'admin') {
+    if (localStorage.getItem('rol') !== 'admin') {
       this.router.navigateByUrl('login');
       return;
     }
@@ -36,14 +34,48 @@ export class Admin implements OnInit {
   }
 
   cargarTurnos(): void {
-    const datosLocales = localStorage.getItem('turnos_peluqueria');
-    if (datosLocales) {
-      this.listaTurnos = JSON.parse(datosLocales);
+    this.listaTurnos = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('turnos_')) {
+        const datos = localStorage.getItem(key);
+        if (datos) {
+          try {
+            const turnosUsuario = JSON.parse(datos);
+            this.listaTurnos.push(...turnosUsuario);
+          } catch (e) {
+            console.error("Error al parsear datos de: " + key);
+          }
+        }
+      }
+    }
+  }
+
+  eliminarTurno(mailCliente: string, hora: string, dia: string) {
+    const key = `turnos_${mailCliente}`;
+    const datos = localStorage.getItem(key);
+    
+    if (datos) {
+      let turnos: Turno[] = JSON.parse(datos);
+      
+      // Filtrar: mantenemos todos los que NO coincidan exactamente
+      const antes = turnos.length;
+      turnos = turnos.filter(t => !(t.hora === hora && t.dia === dia));
+      
+      if (turnos.length < antes) {
+        if (turnos.length > 0) {
+          localStorage.setItem(key, JSON.stringify(turnos));
+        } else {
+          localStorage.removeItem(key);
+        }
+        this.cargarTurnos(); // Recargamos la vista
+      }
     }
   }
 
   cerrarSesion() {
     localStorage.removeItem('rol');
+    localStorage.removeItem('usuario');
     this.router.navigateByUrl('login');
   }
 }

@@ -17,32 +17,39 @@ export class Login {
   }
 
   login() {
-    console.log("Mail ingresado:", this.miLogin.mail);
-    console.log("Contra ingresada:", this.miLogin.contra);
-
-    // 1. Comprobar si es el Admin
+    // 1. Caso Especial: Administrador
     if (this.miLogin.mail === 'admin@peluqueria.com' && this.miLogin.contra === '123456') {
-      console.log("¡Ingreso correcto como Administrador!");
       localStorage.setItem('rol', 'admin');
-      this.router.navigateByUrl("admin-dashboard"); 
+      localStorage.setItem('usuario', this.miLogin.mail); // Marcamos la sesión
+      this.router.navigateByUrl("admin-dashboard");
       return; 
     }
 
-  
-    const usuarioGuardado = localStorage.getItem("usuario");
+    // 2. Obtener la lista completa de registrados
+    const datosGuardados = localStorage.getItem("usuarios_registrados");
+    
+    if (!datosGuardados) {
+      alert("No hay ningún usuario registrado.");
+      return;
+    }
 
-    if (usuarioGuardado) {
-      const usuario: Registros = JSON.parse(usuarioGuardado);
+    const listaUsuarios: Registros[] = JSON.parse(datosGuardados);
 
-      if (this.miLogin.mail === usuario.mail && this.miLogin.contra === usuario.contra) {
-        console.log("Login correcto como cliente");
-        localStorage.setItem('rol', 'cliente');
-        this.router.navigateByUrl("turno"); 
-      } else {
-        alert("Datos incorrectos");
-      }
+    // 3. Buscar si el mail y contraseña coinciden con alguien en la lista
+    const usuarioEncontrado = listaUsuarios.find(u => 
+      u.mail === this.miLogin.mail && u.contra === this.miLogin.contra
+    );
+
+    if (usuarioEncontrado) {
+      console.log("Login exitoso");
+      
+      // GUARDAMOS EL MAIL PARA QUE EL GUARD SEPA QUE ESTÁS LOGUEADO
+      localStorage.setItem('usuario', usuarioEncontrado.mail); 
+      localStorage.setItem('rol', 'cliente');
+      
+      this.router.navigateByUrl("turno"); 
     } else {
-      alert("No hay ningún usuario registrado en este navegador todavía.");
+      alert("Datos incorrectos o usuario no registrado.");
     }
   } 
-} 
+}

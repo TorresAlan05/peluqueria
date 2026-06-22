@@ -1,7 +1,5 @@
 import { Routes, Router } from '@angular/router';
 import { inject } from '@angular/core';
-
-// Tus componentes
 import { Registro } from './registro/registro';
 import { Login } from './login/login';
 import { Home } from './home/home';
@@ -18,19 +16,9 @@ export const routes: Routes = [
   { 
     path: 'mis-turnos', 
     component: MisTurnos,
-    // Aquí implementamos la protección:
     canActivate: [() => {
       const router = inject(Router);
-      const usuario = localStorage.getItem('usuario');
-      
-      // Verificamos si existe usuario logueado
-      if (usuario) {
-        return true; // Acceso permitido
-      } else {
-        alert('Debes iniciar sesión para ver tus turnos.');
-        router.navigate(['/login']);
-        return false; // Bloquea la carga del componente
-      }
+      return localStorage.getItem('usuario') ? true : router.createUrlTree(['/login']);
     }]
   },
   { path: 'turno', component: Turno }, 

@@ -1,32 +1,34 @@
-import { Component } from '@angular/core'; // Ya no necesitás OnInit si no lo usás
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from "@angular/router";
 import { Registros } from '../templates/templates';
 
 @Component({
   selector: 'app-registro',
-  standalone: true, // Asegurate que esto esté presente
   imports: [FormsModule, RouterLink],
   templateUrl: './registro.html',
   styleUrl: './registro.css',
 })
-export class Registro {
-  miRegistro: Registros;
+  
+export class Registro{
+    miRegistro:Registros;
 
-  // Cambiamos 'public' por 'private' y usamos 'router' como nombre estándar
-  constructor(private router: Router) {
-    this.miRegistro = new Registros();
-  }
+  constructor(public route:Router) {
+     this.miRegistro = new Registros;
+   }
 
-  ClickRegistros() {
-    console.log("Registrando:", this.miRegistro.mail);
-    localStorage.setItem("usuario", JSON.stringify(this.miRegistro));
+   ClickRegistros(){
+    // 1. Obtener la lista actual (si existe)
+    const datosGuardados = localStorage.getItem("usuarios_registrados");
+    const listaUsuarios: Registros[] = datosGuardados ? JSON.parse(datosGuardados) : [];
 
-    // Usamos la barra "/" para indicar ruta absoluta desde la raíz
-    this.router.navigateByUrl('/turno').then(success => {
-      if (!success) {
-        console.error("La navegación falló. ¿La ruta '/turno' está definida en app.routes.ts?");
-      }
-    });
-  }
+    // 2. Agregar el nuevo registro
+    listaUsuarios.push(this.miRegistro);
+
+    // 3. Guardar la lista completa (NO sobrescribir el usuario único)
+    localStorage.setItem("usuarios_registrados", JSON.stringify(listaUsuarios));
+
+    console.log("Usuario registrado:", this.miRegistro.mail);
+    this.route.navigateByUrl("login"); // Mejor llevarlo al login
+}
 }

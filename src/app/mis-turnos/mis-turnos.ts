@@ -36,6 +36,12 @@ export class MisTurnos implements OnInit {
     '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'
   ];
 
+  // Helper para obtener la llave dinámica del usuario logueado
+  private getStorageKey(): string {
+    const usuario = localStorage.getItem('usuario');
+    return `turnos_${usuario}`;
+  }
+
   ngOnInit(): void {
     const usuarioLogueado = localStorage.getItem('usuario');
     
@@ -48,16 +54,20 @@ export class MisTurnos implements OnInit {
     this.cargarTurnos();
   }
 
-  // MÉTODO PARA CERRAR SESIÓN
-  cerrarSesion(): void {
-    if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
-      localStorage.removeItem('usuario');
-      this.router.navigate(['/login']);
-    }
+cerrarSesion(): void {
+  if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+    // BORRAMOS SOLO LA LLAVE DE SESIÓN
+    localStorage.removeItem('usuario'); 
+    
+    // NUNCA toques 'usuarios' (tu lista de registrados) 
+    // ni otras llaves que no sean la del usuario actual.
+    
+    this.router.navigate(['/login']);
   }
+}
 
   cargarTurnos(): void {
-    const datosLocales = localStorage.getItem('turnos_peluqueria');
+    const datosLocales = localStorage.getItem(this.getStorageKey());
     if (datosLocales) {
       this.listaTurnos = JSON.parse(datosLocales);
     }
@@ -97,10 +107,11 @@ export class MisTurnos implements OnInit {
   }
 
   private actualizarLocalStorage(): void {
+    const key = this.getStorageKey();
     if (this.listaTurnos.length > 0) {
-      localStorage.setItem('turnos_peluqueria', JSON.stringify(this.listaTurnos, null, 2));
+      localStorage.setItem(key, JSON.stringify(this.listaTurnos, null, 2));
     } else {
-      localStorage.removeItem('turnos_peluqueria'); 
+      localStorage.removeItem(key); 
     }
   }
 }
