@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { RouterLink } from "@angular/router";
+// 1. Importar Router
+import { Router, RouterLink } from "@angular/router"; 
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -13,24 +14,19 @@ import { CommonModule } from '@angular/common';
 export class Turno implements OnInit {
   formTurno!: FormGroup;
 
-  // Listas de opciones para los desplegables (Selects)
   listaServicios: string[] = ['Corte', 'Barba', 'Corte + Barba', 'Coloración + Corte'];
-
   listaDias: string[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+  listaHoras: string[] = ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
 
-  listaHoras: string[] = [
-    '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'
-  ];
-
-  constructor(private fb: FormBuilder) {}
+  // 2. Inyectar Router en el constructor
+  constructor(private fb: FormBuilder, private router: Router) {}
 
   ngOnInit(): void {
-    // Inicializamos el formulario con los nuevos campos requeridos
     this.formTurno = this.fb.group({
       nombre: ['', Validators.required],
       apellido: ['', Validators.required],
-      servicio: ['', Validators.required], // <-- Nuevo campo
-      dia: ['', Validators.required], 
+      servicio: ['', Validators.required],
+      dia: ['', Validators.required],
       hora: ['', Validators.required],
       observaciones: ['']
     });
@@ -38,14 +34,12 @@ export class Turno implements OnInit {
 
   onSubmit(): void {
     if (this.formTurno.valid) {
-      const datosTurno = this.formTurno.value;
-
-      this.guardarEnLocalStorage(datosTurno); 
-      this.formTurno.reset({
-        servicio: '',
-        dia: '',
-        hora: ''
-      }); // Resetea el formulario y deja los selects por defecto vacíos
+      this.guardarEnLocalStorage(this.formTurno.value); 
+      
+      // 3. Redirección automática tras guardar
+      this.router.navigate(['/mis-turnos']); 
+      
+      this.formTurno.reset(); 
     } else {
       alert('Por favor, completa todos los campos requeridos.');
     }
@@ -53,18 +47,11 @@ export class Turno implements OnInit {
 
   guardarEnLocalStorage(nuevoTurnoObjeto: any) {
     const datosLocales = localStorage.getItem('turnos_peluqueria');
-    let listaTurnos: any[] = [];
-
-    if (datosLocales) {
-      listaTurnos = JSON.parse(datosLocales);
-    }
+    let listaTurnos: any[] = datosLocales ? JSON.parse(datosLocales) : [];
 
     listaTurnos.push(nuevoTurnoObjeto);
     localStorage.setItem('turnos_peluqueria', JSON.stringify(listaTurnos, null, 2));
-
-    console.log("%c--- LISTA DE TURNOS ACTUALIZADA ---", "color: #00ff00; font-weight: bold;");
-    console.table(listaTurnos); 
-
-    alert(`¡Turno de ${nuevoTurnoObjeto.nombre} para ${nuevoTurnoObjeto.servicio} agendado con éxito!`);
+    
+    alert(`¡Turno agendado con éxito!`);
   }
 }

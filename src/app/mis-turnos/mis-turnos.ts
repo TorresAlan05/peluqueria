@@ -1,23 +1,35 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { FormsModule } from '@angular/forms'; // <-- Importante para usar [(ngModel)] al editar
+import { Router, RouterLink } from '@angular/router'; 
+import { FormsModule } from '@angular/forms'; 
+
+interface Turno {
+  nombre: string;
+  apellido: string;
+  mail: string;
+  servicio: string;
+  fecha: string;
+  dia: string;
+  hora: string;
+  estado: 'Confirmado' | 'Pendiente';
+  observaciones?: string;
+}
 
 @Component({
   selector: 'app-mis-turnos',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule], // <-- Agregamos FormsModule aquí
+  imports: [CommonModule, RouterLink, FormsModule], 
   templateUrl: './mis-turnos.html',
   styleUrls: ['./mis-turnos.css'] 
 })
 export class MisTurnos implements OnInit {
-  listaTurnos: any[] = [];
+  listaTurnos: Turno[] = [];
   
-  // Controlan qué turno se está editando en la lista
-  indiceEditando: number = -1; 
-  turnoEditado: any = {};
+  constructor(private router: Router) {} 
 
-  // Listas de opciones idénticas a tu formulario principal
+  indiceEditando: number = -1; 
+  turnoEditado: Partial<Turno> = {};
+
   listaServicios: string[] = ['Corte', 'Barba', 'Corte + Barba', 'Coloración + Corte'];
   listaDias: string[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
   listaHoras: string[] = [
@@ -25,7 +37,23 @@ export class MisTurnos implements OnInit {
   ];
 
   ngOnInit(): void {
+    const usuarioLogueado = localStorage.getItem('usuario');
+    
+    if (!usuarioLogueado || usuarioLogueado === 'null' || usuarioLogueado === 'undefined') {
+      alert('Debes iniciar sesión para ver tus turnos.');
+      this.router.navigate(['/login']);
+      return; 
+    }
+
     this.cargarTurnos();
+  }
+
+  // MÉTODO PARA CERRAR SESIÓN
+  cerrarSesion(): void {
+    if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+      localStorage.removeItem('usuario');
+      this.router.navigate(['/login']);
+    }
   }
 
   cargarTurnos(): void {
@@ -35,21 +63,17 @@ export class MisTurnos implements OnInit {
     }
   }
 
-  // --- NUEVA FUNCIONALIDAD: ELIMINAR UN TURNO ---
   eliminarTurno(index: number): void {
     const turno = this.listaTurnos[index];
-    const confirmar = confirm(`¿Estás seguro de que deseas eliminar el turno de ${turno.nombre}?`);
-    
+    const confirmar = confirm(`¿Estás seguro de que deseas eliminar el turno de ${turno.nombre} ${turno.apellido}?`);
     if (confirmar) {
-      this.listaTurnos.splice(index, 1); // Remueve el turno del array
+      this.listaTurnos.splice(index, 1); 
       this.actualizarLocalStorage();
     }
   }
 
-  // --- NUEVA FUNCIONALIDAD: EDITAR DESDE LA LISTA ---
   habilitarEdicion(index: number): void {
     this.indiceEditando = index;
-    // Creamos una copia para no alterar el original hasta que el usuario guarde
     this.turnoEditado = { ...this.listaTurnos[index] }; 
   }
 
@@ -59,14 +83,12 @@ export class MisTurnos implements OnInit {
   }
 
   guardarEdicion(index: number): void {
-    // Reemplazamos el turno viejo por el editado
-    this.listaTurnos[index] = { ...this.turnoEditado };
+    this.listaTurnos[index] = { ...this.turnoEditado } as Turno;
     this.actualizarLocalStorage();
     this.cancelarEdicion();
     alert('Turno modificado con éxito.');
   }
 
-  // Tu función original de limpiar historial (actualizada para usar el método auxiliar)
   borrarTodosLosTurnos(): void {
     if (confirm('¿Estás seguro de que querés borrar todos los turnos agendados?')) {
       this.listaTurnos = [];
@@ -74,15 +96,11 @@ export class MisTurnos implements OnInit {
     }
   }
 
-  // Método auxiliar para mantener limpio el LocalStorage
   private actualizarLocalStorage(): void {
     if (this.listaTurnos.length > 0) {
       localStorage.setItem('turnos_peluqueria', JSON.stringify(this.listaTurnos, null, 2));
     } else {
-      localStorage.removeItem('turnos_peluqueria'); // Si no quedan turnos, borra la clave
+      localStorage.removeItem('turnos_peluqueria'); 
     }
   }
-
-
-  
 }

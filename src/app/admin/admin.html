@@ -1,14 +1,13 @@
 <div class="min-h-screen bg-[#0a0a0a] text-white p-4 md:p-10 font-sans">
   <div class="max-w-6xl mx-auto space-y-8">
     
-    <!-- Barra Superior / Encabezado -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-neutral-900 pb-6 gap-4">
       <div>
         <div class="inline-block bg-neutral-900 border border-neutral-800 text-amber-400 text-xs px-3 py-1 rounded-full uppercase tracking-widest font-semibold mb-2">
           Panel de Control Interno
         </div>
         <h1 class="text-3xl font-black tracking-tight text-white">Turnos Solicitados</h1>
-        <p class="text-neutral-500 text-sm font-light">Agenda completa de Matias y Alan.</p>
+        <p class="text-neutral-500 text-sm font-light">Agenda completa.</p>
       </div>
       
       <button (click)="cerrarSesion()" 
@@ -17,7 +16,6 @@
       </button>
     </div>
 
-    <!-- Contenedor de la Tabla -->
     <div class="bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden shadow-2xl">
       <div class="p-5 border-b border-neutral-800 bg-neutral-900/50">
         <h3 class="text-lg font-bold text-amber-400">Próximas Citas</h3>
@@ -29,30 +27,24 @@
             <tr class="bg-neutral-950 text-neutral-400 text-xs uppercase tracking-wider border-b border-neutral-800">
               <th class="p-4 font-semibold">Cliente</th>
               <th class="p-4 font-semibold">Servicio</th>
-              <th class="p-4 font-semibold">Barbero asignado</th>
               <th class="p-4 font-semibold">Fecha y Hora</th>
               <th class="p-4 font-semibold text-center">Estado</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-neutral-800 text-sm font-light text-neutral-300">
             
-            @for (turno of listaTurnos; track turno.cliente) {
+            @for (turno of listaTurnos; track turno.mail) {
               <tr class="hover:bg-neutral-800/30 transition duration-200">
-                <!-- Cliente -->
                 <td class="p-4">
-                  <div class="font-normal text-white">{{ turno.cliente }}</div>
+                  <div class="font-normal text-white">{{ turno.nombre }} {{ turno.apellido }}</div>
                   <div class="text-xs text-neutral-500 font-light">{{ turno.mail }}</div>
                 </td>
-                <!-- Servicio -->
                 <td class="p-4 font-light">{{ turno.servicio }}</td>
-                <!-- Barbero -->
-                <td class="p-4 text-amber-400 font-medium tracking-wide">{{ turno.barbero }}</td>
-                <!-- Fecha y Hora -->
+                
                 <td class="p-4">
                   <div class="font-normal text-white">{{ turno.hora }}</div>
-                  <div class="text-xs text-neutral-500">{{ turno.fecha }}</div>
+                  <div class="text-xs text-neutral-500">{{ turno.dia }}, {{ turno.fecha }}</div>
                 </td>
-                <!-- Estado -->
                 <td class="p-4 text-center">
                   @if (turno.estado === 'Confirmado') {
                     <span class="px-2.5 py-1 text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full">
@@ -67,7 +59,7 @@
               </tr>
             } @empty {
               <tr>
-                <td colspan="5" class="p-8 text-center text-neutral-500 italic">
+                <td colspan="4" class="p-8 text-center text-neutral-500 italic">
                   No hay turnos registrados para los próximos días.
                 </td>
               </tr>

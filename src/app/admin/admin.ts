@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 interface Turno {
-  cliente: string;
+  nombre: string;
+  apellido: string;
   mail: string;
   servicio: string;
-  barbero: string;
-  fecha: string;
+  fecha: string; // Ej: "2026-06-24"
+  dia: string;   // Ej: "Miércoles"
   hora: string;
   estado: 'Confirmado' | 'Pendiente';
 }
@@ -14,18 +16,13 @@ interface Turno {
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [], 
-  templateUrl: './admin.html',  // <- Corregido: sin el "admin/"
-  styleUrl: './admin.css'       // <- Corregido: sin el "admin/"
+  imports: [CommonModule], 
+  templateUrl: './admin.html',  
+  styleUrl: './admin.css'       
 })
-export class Admin implements OnInit { // <- Corregido: Se llama Admin para coincidir con el spec.ts
+export class Admin implements OnInit { 
   
-  listaTurnos: Turno[] = [
-    { cliente: 'Carlos Gómez', mail: 'carlos@gmail.com', servicio: 'Corte Clásico & Barba', barbero: 'Alan', fecha: '24/06/2026', hora: '16:30 hs', estado: 'Confirmado' },
-    { cliente: 'Lucas Rodríguez', mail: 'lucas@gmail.com', servicio: 'Color & Diseño Urbano', barbero: 'Matías', fecha: '24/06/2026', hora: '18:00 hs', estado: 'Pendiente' },
-    { cliente: 'Juan Perez', mail: 'juan@gmail.com', servicio: 'Perfilado de Barba', barbero: 'Alan', fecha: '25/06/2026', hora: '10:00 hs', estado: 'Confirmado' },
-    { cliente: 'Mateo Diaz', mail: 'mateo@gmail.com', servicio: 'Corte Infantil', barbero: 'Matías', fecha: '25/06/2026', hora: '11:15 hs', estado: 'Confirmado' }
-  ];
+  listaTurnos: Turno[] = [];
 
   constructor(private router: Router) {}
 
@@ -33,6 +30,15 @@ export class Admin implements OnInit { // <- Corregido: Se llama Admin para coin
     const rol = localStorage.getItem('rol');
     if (rol !== 'admin') {
       this.router.navigateByUrl('login');
+      return;
+    }
+    this.cargarTurnos();
+  }
+
+  cargarTurnos(): void {
+    const datosLocales = localStorage.getItem('turnos_peluqueria');
+    if (datosLocales) {
+      this.listaTurnos = JSON.parse(datosLocales);
     }
   }
 
