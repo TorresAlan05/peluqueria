@@ -17,15 +17,15 @@ export class Login {
   }
 
   login() {
-    // 1. Caso Especial: Administrador
+   
     if (this.miLogin.mail === 'admin@peluqueria.com' && this.miLogin.contra === '123456') {
       localStorage.setItem('rol', 'admin');
-      localStorage.setItem('usuario', this.miLogin.mail); // Marcamos la sesión
+      localStorage.setItem('usuario', this.miLogin.mail); 
       this.router.navigateByUrl("admin-dashboard");
       return; 
     }
 
-    // 2. Obtener la lista completa de registrados
+   
     const datosGuardados = localStorage.getItem("usuarios_registrados");
     
     if (!datosGuardados) {
@@ -35,19 +35,22 @@ export class Login {
 
     const listaUsuarios: Registros[] = JSON.parse(datosGuardados);
 
-    // 3. Buscar si el mail y contraseña coinciden con alguien en la lista
+    
     const usuarioEncontrado = listaUsuarios.find(u => 
       u.mail === this.miLogin.mail && u.contra === this.miLogin.contra
     );
 
     if (usuarioEncontrado) {
+      
       console.log("Login exitoso");
       
-      // GUARDAMOS EL MAIL PARA QUE EL GUARD SEPA QUE ESTÁS LOGUEADO
+    
       localStorage.setItem('usuario', usuarioEncontrado.mail); 
       localStorage.setItem('rol', 'cliente');
       
-      this.router.navigateByUrl("turno"); 
+      const turnosGuardados = localStorage.getItem(`turnos_${usuarioEncontrado.mail}`);
+      const listaTurnos = turnosGuardados ? JSON.parse(turnosGuardados) : [];
+      this.router.navigateByUrl(listaTurnos.length > 0 ? "mis-turnos" : "turno"); 
     } else {
       alert("Datos incorrectos o usuario no registrado.");
     }

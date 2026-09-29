@@ -30,8 +30,10 @@ export class MisTurnos implements OnInit {
   indiceEditando: number = -1; 
   turnoEditado: Partial<Turno> = {};
 
+  horasOcupadas: string[] = [];
+  fechaMin = '';
+  fechaMax = '';
   listaServicios: string[] = ['Corte', 'Barba', 'Corte + Barba', 'Coloración + Corte'];
-  listaDias: string[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
   listaHoras: string[] = [
     '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'
   ];
@@ -50,7 +52,11 @@ export class MisTurnos implements OnInit {
       this.router.navigate(['/login']);
       return; 
     }
-
+    const hoy = new Date();
+const limite = new Date();
+limite.setDate(limite.getDate() + 30);
+this.fechaMin = this.aFormatoFecha(hoy);
+this.fechaMax = this.aFormatoFecha(limite);
     this.cargarTurnos();
   }
 
@@ -83,21 +89,92 @@ cerrarSesion(): void {
   }
 
   habilitarEdicion(index: number): void {
-    this.indiceEditando = index;
-    this.turnoEditado = { ...this.listaTurnos[index] }; 
-  }
+  this.indiceEditando = index;
+  this.turnoEditado = { ...this.listaTurnos[index] }; 
+  this.horasOcupadas = this.obtenerHorasOcupadas(this.turnoEditado.dia || '', index);
+}
 
   cancelarEdicion(): void {
     this.indiceEditando = -1;
     this.turnoEditado = {};
   }
+  private aFormatoFecha(f: Date): string {
+  const y = f.getFullYear();
+  const m = String(f.getMonth() + 1).padStart(2, '0');
+  const d = String(f.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+private esFinDeSemana(fecha: string): boolean {
+  const [y, m, d] = fecha.split('-').map(Number);
+  const diaSemana = new Date(y, m - 1, d).getDay();
+  return diaSemana === 0 || diaSemana === 6;
+}
+
+// Horas ocupadas en una fecha, ignorando el turno que se está editando
+private obtenerHorasOcupadas(fecha: string, indiceIgnorado: number): string[] {
+  if (!fecha) return [];
+  const ocupadas: string[] = [];
+  const keyActual = this.getStorageKey();
+
+  // Mis otros turnos (en memoria)
+  this.listaTurnos.forEach((t, i) => {
+    if (i !== indiceIgnorado && t.dia === fecha) ocupadas.push(t.hora);
+  });
+
+  // Turnos de los demás usuarios
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.startsWith('turnos_') && key !== keyActual) {
+      const turnos = JSON.parse(localStorage.getItem(key) || '[]');
+      turnos.forEach((t: any) => {
+        if (t.dia === fecha) ocupadas.push(t.hora);
+      });
+    }
+  }
+  return ocupadas;
+}
+
+cambioDia(): void {
+  this.turnoEditado.hora = '';
+  this.horasOcupadas = this.obtenerHorasOcupadas(this.turnoEditado.dia || '', this.indiceEditando);
+}
+
+horaNoDisponible(hora: string): boolean {
+  if (this.horasOcupadas.includes(hora)) return true;
+
+  // Si la fecha elegida es hoy, las horas que ya pasaron tampoco se pueden
+  if (this.turnoEditado.dia === this.fechaMin) {
+    const ahora = new Date();
+    const horaActual = ahora.getHours() * 60 + ahora.getMinutes();
+    const [h, min] = hora.split(':').map(Number);
+    return h * 60 + min <= horaActual;
+  }
+  return false;
+}
 
   guardarEdicion(index: number): void {
+  const { dia, hora } = this.turnoEditado;
+
+  if (!dia || !hora || !/^\d{4}-\d{2}-\d{2}$/.test(dia)) {
+    alert('Elegí una fecha del calendario y una hora.');
+    return;
+  }
+  if (this.esFinDeSemana(dia)) {
+    alert('Atendemos de lunes a viernes.');
+    return;
+  }
+  if (this.obtenerHorasOcupadas(dia, index).includes(hora)) {
+    alert('Ese horario ya fue reservado. Elegí otro, por favor.');
+    this.horasOcupadas = this.obtenerHorasOcupadas(dia, index);
+    this.turnoEditado.hora = '';
+    return;
+  }
     this.listaTurnos[index] = { ...this.turnoEditado } as Turno;
     this.actualizarLocalStorage();
     this.cancelarEdicion();
     alert('Turno modificado con éxito.');
-  }
+}
 
   borrarTodosLosTurnos(): void {
     if (confirm('¿Estás seguro de que querés borrar todos los turnos agendados?')) {

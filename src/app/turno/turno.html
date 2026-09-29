@@ -13,15 +13,18 @@
         <option *ngFor="let s of listaServicios" [value]="s">{{ s }}</option>
       </select>
    
-      <select formControlName="dia">
-        <option value="" disabled selected>Seleccione un día</option>
-        <option *ngFor="let d of listaDias" [value]="d">{{ d }}</option>
-      </select>
+      <label>Día:</label>
+<input type="date" formControlName="dia" [min]="fechaMin" [max]="fechaMax">
+<p *ngIf="formTurno.get('dia')?.errors?.['finDeSemana']" style="color: #e53e3e; font-size: 13px;">
+  Atendemos de lunes a viernes.
+</p>
 
-      <select formControlName="hora">
-        <option value="" disabled selected>Seleccione una hora</option>
-        <option *ngFor="let h of listaHoras" [value]="h">{{ h }}</option>
-      </select>
+<select formControlName="hora">
+  <option value="" disabled>Seleccione una hora</option>
+  <option *ngFor="let h of listaHoras" [value]="h" [disabled]="horaNoDisponible(h)">
+    {{ h }}{{ horaNoDisponible(h) ? ' (no disponible)' : '' }}
+  </option>
+</select>
 
       <label>Observaciones (Opcional):</label>
       <textarea formControlName="observaciones"></textarea>

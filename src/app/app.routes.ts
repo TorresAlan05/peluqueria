@@ -21,6 +21,12 @@ export const routes: Routes = [
       return localStorage.getItem('usuario') ? true : router.createUrlTree(['/login']);
     }]
   },
-  { path: 'turno', component: Turno }, 
+  { path: 'turno',
+    component: Turno,
+    canActivate: [() => {
+    const router = inject(Router);
+    return localStorage.getItem('usuario') ? true : router.createUrlTree(['/login']);
+  }]
+}, 
   { path: '**', redirectTo: 'home', pathMatch: 'full' } 
 ];

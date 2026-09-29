@@ -28,18 +28,22 @@
           </div>
 
           <div class="campo-edicion">
-            <label>Día:</label>
-            <select [(ngModel)]="turnoEditado.dia" class="select-edicion">
-              <option *ngFor="let d of listaDias" [value]="d">{{ d }}</option>
-            </select>
-          </div>
+  <label>Día:</label>
+  <input type="date" class="select-edicion"
+         [ngModel]="turnoEditado.dia"
+         (ngModelChange)="turnoEditado.dia = $event; cambioDia()"
+         [min]="fechaMin" [max]="fechaMax">
+</div>
 
           <div class="campo-edicion">
-            <label>Hora:</label>
-            <select [(ngModel)]="turnoEditado.hora" class="select-edicion">
-              <option *ngFor="let h of listaHoras" [value]="h">{{ h }} hs</option>
-            </select>
-          </div>
+  <label>Hora:</label>
+  <select [(ngModel)]="turnoEditado.hora" class="select-edicion">
+    <option value="" disabled>Seleccione una hora</option>
+    <option *ngFor="let h of listaHoras" [value]="h" [disabled]="horaNoDisponible(h)">
+      {{ h }} hs{{ horaNoDisponible(h) ? ' (no disponible)' : '' }}
+    </option>
+  </select>
+</div>
 
           <div class="turno-acciones">
             <button (click)="guardarEdicion(i)" class="btn-guardar">💾 Guardar</button>
